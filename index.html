@@ -1,0 +1,264 @@
+<!-- real_index.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cut Shapes!</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#05070a;
+      --neon:#00baff;
+      --neon-2:#6dacff;
+      --panel:rgba(255,255,255,0.05);
+      --text:#eaf6ff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:radial-gradient(1200px 800px at 50% 40%, #07111a 0%, #05070a 60%, #04060a 100%);color:var(--text);font-family:'Orbitron',system-ui,Segoe UI,Roboto,Arial,sans-serif}
+
+    /* subtle animated grid */
+    .grid{
+      position:fixed; inset:0; pointer-events:none; opacity:.12;
+      background-image:
+        linear-gradient(to right, #2b5d7f22 1px, transparent 1px),
+        linear-gradient(to bottom, #2b5d7f22 1px, transparent 1px);
+      background-size: 40px 40px;
+      transform: translateZ(0);
+      animation: drift 30s linear infinite;
+    }
+    @keyframes drift { 0%{background-position:0 0} 100%{background-position:80px 80px} }
+    @media (prefers-reduced-motion: reduce){
+      .grid{animation:none}
+    }
+
+    .wrap{
+      min-height:100dvh;
+      display:grid; place-items:center;
+      padding:32px;
+    }
+    .card{
+      width:min(780px, 92vw);
+      background:var(--panel);
+      border:1px solid rgba(0,153,255,.35);
+      border-radius:16px;
+      padding:32px 28px 26px;
+      box-shadow:
+        0 0 24px rgba(0,153,255,.25),
+        0 0 48px rgba(0,153,255,.08) inset;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Logo */
+    .logo{
+      font-weight:800;
+      font-size: clamp(36px, 6vw, 64px);
+      letter-spacing: 3px;
+      line-height:1.05;
+      margin: 0 0 8px;
+      background: linear-gradient(90deg, var(--neon), var(--neon-2) 45%, var(--neon) 100%);
+      -webkit-background-clip: text;
+      background-clip:text;
+      color:transparent;
+      text-shadow: 0 0 14px rgba(0,153,255,.35);
+      user-select:none;
+      position:relative;
+    }
+    .subtitle{
+      margin:0 0 24px;
+      font-size: clamp(12px, 2.2vw, 14px);
+      opacity:.8;
+      letter-spacing:2px;
+    }
+
+    /* Buttons row */
+    .actions{
+      display:flex; gap:12px; justify-content:center; margin-top:10px; flex-wrap:wrap;
+    }
+    .btn{
+      --pad: 14px;
+      min-width: 160px;
+      padding: var(--pad) 22px;
+      border-radius: 12px;
+      border:1px solid rgba(0,153,255,.55);
+      background: linear-gradient(180deg, rgba(0,153,255,.18), rgba(0,153,255,.10));
+      color:var(--text);
+      font-weight:800; font-size:16px; letter-spacing:1px;
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .btn:hover{
+      transform: translateY(-2px);
+      border-color: rgba(0,153,255,.95);
+      box-shadow: 0 0 18px rgba(0,153,255,.45);
+      background: linear-gradient(180deg, rgba(0,153,255,.22), rgba(0,153,255,.12));
+    }
+    .btn:active{ transform: translateY(0) scale(.99); }
+    .btn.primary{
+      background: linear-gradient(180deg, rgba(0,153,255,.30), rgba(0,153,255,.14));
+      border-color: rgba(0,153,255,.9);
+      box-shadow: 0 0 24px rgba(0,153,255,.35);
+    }
+
+    /* footer hints */
+    .hints{ margin-top:16px; font-size:12px; opacity:.75; letter-spacing:1.5px }
+    .kbd{ display:inline-block; padding:2px 6px; border:1px solid rgba(255,255,255,.25); border-radius:6px; font-size:11px; margin:0 2px; background:rgba(255,255,255,.06) }
+
+    /* Help dialog (native <dialog>) */
+    dialog#help{
+      width:min(720px, 92vw);
+      border:none; padding:0; background:transparent;
+    }
+    dialog#help::backdrop{
+      background: rgba(0,0,0,.8); backdrop-filter: blur(2px);
+    }
+    .help-card{
+      background:#081018;
+      border:1px solid rgba(0,153,255,.35);
+      border-radius:14px;
+      padding:22px 22px 18px;
+      box-shadow: 0 0 22px rgba(0,153,255,.25);
+    }
+    .help-card h2{
+      margin:2px 0 8px; font-size:26px; letter-spacing:2px;
+      background: linear-gradient(90deg, var(--neon), var(--neon-2));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .help-grid{
+      display:grid; gap:10px; margin-top:10px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .help-item{
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:10px; padding:12px 12px;
+      text-align:left; font-size:14px;
+    }
+    .help-item h3{ margin:0 0 6px; color: white; font-size:13px; opacity:.85; letter-spacing:1px }
+    .help-item div{ margin:0 0 6px; color: white; font-size:10px; opacity:.85; letter-spacing:1px }
+
+    .close-row{ display:flex; justify-content:flex-end; margin-top:14px }
+    .close-btn{
+      padding:10px 14px; border-radius:10px; cursor:pointer;
+      border:1px solid rgba(0,153,255,.55);
+      background: linear-gradient(180deg, rgba(0,153,255,.18), rgba(0,153,255,.10));
+      color:var(--text); font-weight:800; letter-spacing:1px;
+    }
+    .close-btn:hover{ border-color: rgba(0,153,255,.95); box-shadow:0 0 14px rgba(0,153,255,.45) }
+
+    /* watermark line */
+    .sep{ height:1px; background:linear-gradient(90deg, transparent, rgba(0,153,255,.35), transparent); margin:18px 0 12px }
+  </style>
+</head>
+<body>
+  <div class="grid" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <section class="card" role="region" aria-labelledby="logo">
+      <h1 id="logo" class="logo">CUT SHAPES!</h1>
+      <p class="subtitle"></p>
+
+      <div class="actions" role="group" aria-label="main actions">
+        <button class="btn primary" id="startBtn">START GAME</button>
+        <button class="btn" id="helpBtn" aria-haspopup="dialog" aria-controls="help">HELP</button>
+      </div>
+
+    <!--
+      
+      <div class="hints">
+        Press <span class="kbd">Enter</span> to Start • <span class="kbd">H</span> for Help • <span class="kbd">Esc</span> to Close
+      </div>
+
+    -->
+      <div class="hints">
+         <span class="kbd">F11</span> 을 눌러 전체화면 하세요 
+      </div>
+      
+      <div class="sep" aria-hidden="true"></div>
+    <!--
+      <div style="font-size:12px;opacity:.6;letter-spacing:1px">v1.0</div>
+    -->  
+      
+    </section>
+  </main>
+
+  <!-- Help dialog -->
+  <dialog id="help">
+    <div class="help-card">
+      <h2>How to Play</h2>
+      <div class="help-grid">
+        <div class="help-item">
+          <h3>Goal</h3>
+          <div>제한 시간 안에 가능한 많은 도형을 절단하세요. 콤보를 이어갈수록 점수가 더 커집니다.</div>
+        </div>
+        <div class="help-item">
+          <h3>Controls</h3>
+          <div>마우스로 드래그해 절단선을 그립니다. 좌클릭 시작 → 드래그 → 놓기.</div>
+        </div>
+        <div class="help-item">
+          <h3>Combos</h3>
+          <div>연속 절단 시 <b>xN COMBO</b>가 증가하고, 매 히트마다 획득 점수가 +1씩 누적 가산됩니다.</div>
+        </div>
+        <div class="help-item">
+          <h3>Difficulty</h3>
+          <div>시간이 지날 수록 도형이 등장 속도와 도형의 이동 속도가 증가합니다.</div>
+        </div>
+        <div class="help-item">
+          <h3>Pause</h3>
+          <div>우상단 ⏸ 버튼으로 일시정지. 메뉴에서 게임을 재개하거나 재시작할 수 있습니다.</div>
+        </div>
+        <div class="help-item">
+          <h3>Bomb</h3>
+          <div>붉은 색 도형을 절단 할 시 콤보가 초기화 되며, 점수가 -10점 감소합니다.</div>
+        </div>
+      </div>
+      <div class="close-row">
+        <button class="close-btn" id="closeHelp">CLOSE</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const helpBtn = document.getElementById('helpBtn');
+    const helpDlg = document.getElementById('help');
+    const closeHelp = document.getElementById('closeHelp');
+
+    // Start game
+    startBtn.addEventListener('click', () => {
+      // 시작 페이지 파일명에 맞게 수정
+      window.location.href = 'game.html';
+    });
+
+    // Open Help
+    function openHelp(){
+      if (!helpDlg.open) helpDlg.showModal();
+    }
+    function closeHelpDlg(){
+      if (helpDlg.open) helpDlg.close();
+    }
+    helpBtn.addEventListener('click', openHelp);
+    closeHelp.addEventListener('click', closeHelpDlg);
+
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        startBtn.click();
+      }
+      if (e.key.toLowerCase() === 'h') {
+        e.preventDefault();
+        openHelp();
+      }
+      if (e.key === 'Escape') {
+        if (helpDlg.open) {
+          e.preventDefault();
+          closeHelpDlg();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

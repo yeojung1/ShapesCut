@@ -1,0 +1,69 @@
+<!--stop_menu.html-->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>Paused</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --neon: #00baff;
+    --bg: #05070a;
+    --panel: rgba(255,255,255,0.4);
+  }
+  html, body { height:100%; margin:0; background:var(--bg); font-family:'Orbitron',sans-serif; color:#e6f7ff; }
+  .wrap { min-height:100%; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .card {
+    width: 480px; max-width: 92vw;
+    background: #05070a;
+    opacity: 1.0;
+    border: 1px solid rgba(0,153,255,0.3);
+    box-shadow:
+      0 0 10px rgba(0,153,255,0.35),
+      0 0 22px rgba(0,153,255,0.22);
+    border-radius: 12px;
+    padding: 28px 26px 24px; text-align:center;
+  }
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 38px; letter-spacing: 2px;
+    background: linear-gradient(90deg, #71c4ff, #6dacff 40%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow: 0 0 10px rgba(0,153,255,0.25);
+  }
+  p { margin: 6px 0 18px; opacity: .8; font-size: 15px; }
+  .actions { display:flex; flex-direction:column; gap:12px; }
+  .btn {
+    background: transparent; color:#e8f6ff;
+    border:1px solid rgba(0,153,255,0.5);
+    border-radius: 10px; padding:12px 10px; cursor:pointer;
+    font-family: inherit; font-weight:800; letter-spacing:1px; font-size:16px;
+    transition: transform .12s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 14px rgba(0,153,255,0.45);
+    border-color: rgba(0,153,255,0.9);
+    background: rgba(0,153,255,0.08);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>PAUSED</h1>
+      <p>게임이 일시정지되었습니다.</p>
+      <div class="actions">
+        <!-- ‘RESUME’은 실제 상태 복귀까지 하려면 동일 페이지 오버레이가 필요합니다.
+             지금은 전환형이므로 게임 페이지로 돌아가면 새로 시작됩니다. -->
+        <button class="btn" onclick="location.href='game.html'">RESUME</button>
+        <button class="btn" onclick="location.href='game.html'">RESTART</button>
+        <button class="btn" onclick="location.href='index.html'">Main</button>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

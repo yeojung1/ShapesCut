@@ -1,0 +1,83 @@
+<!--result.html-->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>Result</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --neon: #00baff;
+    --bg: #05070a;
+    --panel: rgba(255,255,255,0.04);
+  }
+  html, body { height:100%; margin:0; background:var(--bg); font-family:'Orbitron',sans-serif; color:#e6f7ff; }
+  .wrap {
+    min-height:100%;
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .card {
+    width: 520px; max-width: 92vw;
+    background: var(--panel);
+    border: 1px solid rgba(0,153,255,0.3);
+    box-shadow:
+      0 0 10px rgba(0,153,255,0.4),
+      0 0 24px rgba(0,153,255,0.25);
+    border-radius: 12px;
+    padding: 28px 28px 22px;
+    text-align: center;
+  }
+  h1 {
+    margin: 0 0 10px;
+    font-size: 40px; letter-spacing: 2px;
+    background: linear-gradient(90deg, #71c4ff, #6dacff 40%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow: 0 0 10px rgba(0,153,255,0.25);
+  }
+  .score {
+    margin: 8px 0 18px;
+    font-size: 18px; opacity: 0.85;
+  }
+  .big {
+    font-size: 64px; font-weight: 800; margin: 10px 0 18px;
+    text-shadow: 0 0 16px rgba(0,153,255,0.5);
+  }
+  .actions { display:flex; gap:12px; justify-content:center; margin-top: 10px; }
+  .btn {
+    flex:1;
+    background: transparent; color:#e8f6ff;
+    border:1px solid rgba(0,153,255,0.5);
+    border-radius: 10px; padding:12px 10px; cursor:pointer;
+    font-family: inherit; font-weight:800; letter-spacing:1px; font-size:16px;
+    transition: transform .12s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 14px rgba(0,153,255,0.45);
+    border-color: rgba(0,153,255,0.9);
+    background: rgba(0,153,255,0.08);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>RESULT</h1>
+      <div class="score">Your Score</div>
+      <div id="score" class="big">0</div>
+
+      <div class="actions">
+        <button class="btn" onclick="location.href='game.html'">PLAY AGAIN</button>
+        <button class="btn" onclick="location.href='index.html'">MAIN</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // localStorage에서 점수 로드
+  const saved = localStorage.getItem('lastScore');
+  document.getElementById('score').textContent = saved ? saved : '0';
+</script>
+</body>
+</html>
