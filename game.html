@@ -209,7 +209,13 @@
       <div class="card" style="width:520px;max-width:92vw;background:rgba(255,255,255,0.04);border:1px solid rgba(0,153,255,0.3);box-shadow:0 0 10px rgba(0,153,255,0.4),0 0 24px rgba(0,153,255,0.25);border-radius:12px;padding:28px 28px 22px;text-align:center;">
         <h1 style="margin:0 0 10px;font-size:40px;letter-spacing:2px;background:linear-gradient(90deg,#71c4ff,#6dacff 40%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 10px rgba(0,153,255,0.25);">RESULT</h1>
         <div class="score" style="margin:8px 0 18px;font-size:18px;opacity:.85;">Your Score</div>
-        <div id="ov-score" class="big" style="font-size:64px;font-weight:800;margin:10px 0 18px;text-shadow:0 0 16px rgba(0,153,255,0.5);">0</div>
+        <div id="ov-score" class="big" style="font-size:64px;font-weight:800;margin:10px 0 8px;text-shadow:0 0 16px rgba(0,153,255,0.5);">0</div>
+
+        <!-- 🔹 여기 추가: BEST 점수 표시 -->
+        <div class="best" style="margin:4px 0 18px;font-size:20px;opacity:.9;">
+          BEST : <span id="ov-best">0</span>
+        </div>
+
         <div class="actions" style="display:flex;gap:12px;justify-content:center;margin-top:10px;">
           <button class="btn" data-action="restart">PLAY AGAIN</button>
           <button class="btn" data-action="main">Main</button>
@@ -221,6 +227,7 @@
       .btn:hover{transform:translateY(-1px);box-shadow:0 0 14px rgba(0,153,255,0.45);border-color:rgba(0,153,255,0.9);background:rgba(0,153,255,0.08);}
     </style>
   </template>
+
 
   <!-- 위쪽 UI 영역 -->
   <div id="ui-container">
@@ -274,10 +281,26 @@
       panel.innerHTML = tpl.innerHTML;
 
       if (tplId === 'tpl-result') {
-        const saved = localStorage.getItem('lastScore') || '0';
+        // 마지막 점수 가져오기
+        const last = Number(localStorage.getItem('lastScore') || '0');
+
+        // 이전까지의 최고 점수 가져오기
+        const prevBest = Number(localStorage.getItem('bestScore') || '0');
+
+        // 이번 라운드까지 포함해서 최고 점수 계산
+        const best = Math.max(last, prevBest);
+
+        // localStorage에 최고 기록 저장
+        localStorage.setItem('bestScore', String(best));
+
+        // 결과 팝업에 반영
         const ov = panel.querySelector('#ov-score');
-        if (ov) ov.textContent = saved;
+        if (ov) ov.textContent = last;
+
+        const bestEl = panel.querySelector('#ov-best');
+        if (bestEl) bestEl.textContent = best;
       }
+
 
       bindPanelActions();
       if (!dlg.open) dlg.showModal();
@@ -295,6 +318,10 @@
       closeOverlay();
       // window.resumeGame?.();
     });
+
+  localStorage.setItem('lastScore', currentScore);
+  openOverlay('result');
+
   </script>
 </body>
 </html>
